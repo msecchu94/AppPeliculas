@@ -4,13 +4,12 @@ import 'package:peliculas/src/widgets/card_swiper_widget.dart';
 import 'package:peliculas/src/widgets/movie_horizontal.dart';
 
 class HomePage extends StatelessWidget {
-
-PeliculaProvider peliculaProvider = new PeliculaProvider();
+  PeliculaProvider peliculaProvider = new PeliculaProvider();
 
   @override
   Widget build(BuildContext context) {
-
     peliculaProvider.getPopulares();
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Peliculas en cine'),
@@ -23,69 +22,58 @@ PeliculaProvider peliculaProvider = new PeliculaProvider();
           ],
         ),
         body: Container(
-          mainAxisAlignment : MainAxisAlignment.spaceAround,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _swiperTarjetas(),
               _footer(context),
-              ],
+            ],
           ),
         ));
   }
 
   Widget _swiperTarjetas() {
-
     return FutureBuilder(
-    future: PeliculaProvider.getEnCines(),
+      future: peliculaProvider.getEnCines(),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-     
         if (snapshot.hasData) {
-          return CardSwisper(peliculas:snapshot.data);
+          return CardSwiper(peliculas: snapshot.data);
         } else {
-            return Container(
-            heigth:400.0,
-              child:Center(
-                child:CircularProgreddIndicator()
-              )
-            );
+          return Container(
+              height: 400.0, child: Center(child: CircularProgressIndicator()));
         }
-
       },
-    ),
-
+    );
   }
+
   Widget _footer(context) {
-
-    return  Container(
-
-      width:double.infinity,
-      child:Column(
-
-      crossAxisAlignment:CrossAxisAlignment.start,
-        children:<Widget>[
+    return Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
           Container(
-          padding:EdgeInsert.only(left:20.0),
-          child:Text('Populares',style:Theme.of(context).textTheme.subHead),
-
+            padding: EdgeInsets.only(left: 20.0),
+            child:
+                Text('Populares', style: Theme.of(context).textTheme.subhead),
           ),
-         SizeBox(height:5.0),
-         StreamBuilder(
-           stream: PeliculaProvider.popularesStream,
-           builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-            if (snapshot.hasData) {
-              return MovieHorizontal(
-                peliculas:snapshot.data,
-                siguientePagina:peliculaProvider.getPopulares,
-              );
-            }
-            else{
-              return Center (
-               child: CircularProgressIndicator();
-              );
-            }
-           },
-         ),
-       ],
+          SizedBox(height: 5.0),
+          StreamBuilder(
+            stream: peliculaProvider.popularesStream,
+            builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+              if (snapshot.hasData) {
+                return MovieHorizontal(
+                  peliculas: snapshot.data,
+                  siguientePagina: peliculaProvider.getPopulares,
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }

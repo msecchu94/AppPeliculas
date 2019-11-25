@@ -66,7 +66,7 @@ class Pelicula {
         title: json["title"],
         voteAverage: json["vote_average"].toDouble(),
         overview: json["overview"],
-        releaseDate: DateTime.parse(json["release_date"]),
+        // releaseDate: DateTime.parse(json["release_date"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -97,7 +97,7 @@ class Pelicula {
 
   
   getBackgroundImg(){
-    if (backdropPath == null ) {
+    if (posterPath == null ) {
       return 'https://justynsmith.com/wp-content/themes/cruzy-pro/images/no-image-box.png';
     } else {
       return 'https://image.tmdb.org/t/p/w500/$backdropPath';
